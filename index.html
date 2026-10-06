@@ -88,7 +88,7 @@ header.sc .logo img{border-color:var(--ink)}
 .tab{flex:none;padding:.65em 1.3em;border-radius:99px;border:1.5px solid var(--line);background:transparent;font:800 .88rem var(--sans);transition:all .3s}
 .tab.on{background:var(--ink);border-color:var(--ink);color:var(--cream)}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;animation:rise .6s var(--ease) both}
+.card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;}
 @keyframes rise{from{opacity:0;transform:translateY(26px)}}
 .ph{aspect-ratio:4/3;overflow:hidden;background:#e9dfd0}
 .ph img{width:100%;height:100%;object-fit:cover;display:block}
@@ -180,6 +180,30 @@ footer{background:var(--ink);color:var(--cream);padding:70px 0 120px;overflow:hi
 .fly{position:fixed;z-index:400;width:18px;height:18px;border-radius:50%;background:var(--blue);pointer-events:none}
 .rv{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease)}.rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important;scroll-behavior:auto!important}.rv,.ln span{opacity:1;transform:none}.hin p,.cta,.badge,#ld p{opacity:1}}
+
+/* ===== Scroll animations ===== */
+.rv.l{transform:translateX(-50px)}.rv.r{transform:translateX(50px)}.rv.z{transform:translateY(34px) scale(.94)}
+.rv.l.in,.rv.r.in,.rv.z.in{transform:none}
+.arch.clip{opacity:1;transform:none;clip-path:inset(100% 0 0 0);transition:clip-path 1.4s var(--ease)}
+.arch.clip.in{clip-path:inset(0)}
+.arch img{will-change:transform}
+.band{overflow:hidden;padding:46px 0;background:var(--cream);border-bottom:1px solid var(--line)}
+.band div{display:flex;width:max-content;font:italic 500 clamp(4.5rem,15vw,11rem)/1 var(--serif);white-space:nowrap;will-change:transform}
+.band span{padding:0 .28em;color:transparent;-webkit-text-stroke:1.5px var(--ink)}
+.band span:nth-child(3n+2){color:var(--blue);-webkit-text-stroke:0}
+.steps{position:relative}
+.sline{position:absolute;left:0;top:0;width:3px;height:100%;background:var(--blue);transform:scaleY(var(--p,0));transform-origin:top;z-index:1}
+@media(min-width:850px){.sline{width:100%;height:3px;transform:scaleX(var(--p,0));transform-origin:left}}
+.links a{position:relative}
+.links a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.links a.act::after{transform:scaleX(1)}
+.big{overflow:hidden;padding-bottom:.12em}
+.big span{display:inline-block;transform:translateY(105%);transition:transform .9s var(--ease);transition-delay:calc(var(--i)*45ms)}
+.big.in span{transform:none}
+.topb{position:fixed;right:16px;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:85;width:46px;height:46px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);font-size:1.2rem;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .4s,transform .4s var(--ease)}
+.topb.show{opacity:1;transform:none;pointer-events:auto}
+@media(min-width:900px){.topb{right:28px}}
+@media(prefers-reduced-motion:reduce){.rv.l,.rv.r,.rv.z{transform:none}.arch.clip{clip-path:none}.big span{transform:none}}
 </style>
 </head>
 <body>
@@ -222,9 +246,11 @@ footer{background:var(--ink);color:var(--cream);padding:70px 0 120px;overflow:hi
   <p class="note">Ask about our sugar free and non dairy options in your order notes.</p>
 </div></section>
 
+<div class="band" id="band" aria-hidden="true"><div></div></div>
+
 <section class="story" id="story"><div class="wrap sg">
-  <div class="arch rv"><img alt="Iced latte" loading="lazy" src="https://images.unsplash.com/photo-1669603882470-48a1f6e40324?auto=format&fit=crop&w=800&q=70"></div>
-  <div class="rv"><div class="eyebrow" style="color:var(--gold)">Our Story</div><h2>Brewed <em style="color:#9db8ff">local</em>,<br>served with attitude</h2>
+  <div class="arch rv clip"><img data-px="-.08" alt="Iced latte" loading="lazy" src="https://images.unsplash.com/photo-1669603882470-48a1f6e40324?auto=format&fit=crop&w=800&q=70"></div>
+  <div class="rv r"><div class="eyebrow" style="color:var(--gold)">Our Story</div><h2>Brewed <em style="color:#9db8ff">local</em>,<br>served with attitude</h2>
     <p>Coffee Stains is a local coffee trailer serving Battle Mountain since 2020. Fresh coffee, frappes, smoothies and teas, made for the people who live here.</p>
     <div class="stats"><div><b data-c="2020">0</b><small>Established</small></div><div><b id="nDr" data-c="0">0</b><small>Drinks on the menu</small></div><div><b data-c="6">0</b><small>Frappe flavors</small></div></div>
   </div>
@@ -232,7 +258,7 @@ footer{background:var(--ink);color:var(--cream);padding:70px 0 120px;overflow:hi
 
 <section id="how"><div class="wrap">
   <div class="rv"><div class="eyebrow">How It Works</div><h2>Four steps to <em>coffee</em></h2></div>
-  <div class="steps">
+  <div class="steps"><i class="sline" id="sline"></i>
     <div class="step rv"><b>01</b><div><h3>Pick</h3><p>Browse the menu and choose your options.</p></div></div>
     <div class="step rv"><b>02</b><div><h3>Add</h3><p>Review your cart and total.</p></div></div>
     <div class="step rv"><b>03</b><div><h3>Check out</h3><p>Enter your name, phone and pickup time.</p></div></div>
@@ -243,10 +269,10 @@ footer{background:var(--ink);color:var(--cream);padding:70px 0 120px;overflow:hi
 <section class="visit" id="visit"><div class="wrap">
   <div class="rv"><div class="eyebrow">Visit</div><h2>Find the <em>trailer</em></h2></div>
   <div class="vg">
-    <div class="pnl rv"><h3>Location &amp; Contact</h3>
+    <div class="pnl rv l"><h3>Location &amp; Contact</h3>
       <ul><li>Battle Mountain, NV. We're a trailer, so our spot can change. Check Facebook or Instagram for today's location.</li><li>Call or text 775-455-7714</li><li>Pickup only</li><li>Sugar free and non dairy options available. Some drinks may contain milk, soy, nuts or other allergens, so tell us about any allergy when you order.</li></ul>
       <div class="row"><a class="btn dark sm" href="tel:7754557714">Call</a><a class="btn sm" href="sms:7754557714">Text</a><a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Coffee+Stains+Battle+Mountain+NV">Directions</a></div></div>
-    <div class="pnl rv"><h3>Hours</h3><table class="hrs" id="hrs"></table></div>
+    <div class="pnl rv r"><h3>Hours</h3><table class="hrs" id="hrs"></table></div>
   </div>
 </div></section>
 
@@ -254,9 +280,9 @@ footer{background:var(--ink);color:var(--cream);padding:70px 0 120px;overflow:hi
   <div class="rv"><div class="eyebrow">Reviews</div><h2>What <em>locals</em> say</h2></div>
   <!-- SAMPLE reviews for the mockup. Replace with real customer reviews before launch. -->
   <div class="qs" style="text-align:left">
-    <div class="q rv"><i>&#9733;&#9733;&#9733;&#9733;&#9733;</i><p>"Best iced latte in town. Always friendly and fast."</p><small>Sample Customer</small></div>
-    <div class="q rv"><i>&#9733;&#9733;&#9733;&#9733;&#9733;</i><p>"The frappes are perfect on a hot day. Ordering ahead is so easy."</p><small>Sample Customer</small></div>
-    <div class="q rv"><i>&#9733;&#9733;&#9733;&#9733;&#9733;</i><p>"Love that they have non dairy options. Great local spot."</p><small>Sample Customer</small></div>
+    <div class="q rv z"><i>&#9733;&#9733;&#9733;&#9733;&#9733;</i><p>"Best iced latte in town. Always friendly and fast."</p><small>Sample Customer</small></div>
+    <div class="q rv z"><i>&#9733;&#9733;&#9733;&#9733;&#9733;</i><p>"The frappes are perfect on a hot day. Ordering ahead is so easy."</p><small>Sample Customer</small></div>
+    <div class="q rv z"><i>&#9733;&#9733;&#9733;&#9733;&#9733;</i><p>"Love that they have non dairy options. Great local spot."</p><small>Sample Customer</small></div>
   </div>
 </div></section>
 
@@ -286,6 +312,7 @@ footer{background:var(--ink);color:var(--cream);padding:70px 0 120px;overflow:hi
   <div class="copy">&copy; Coffee Stains &middot; Battle Mountain, NV &middot; Photos from Unsplash</div>
 </div></footer>
 
+<button class="topb" id="topb" aria-label="Back to top">&uarr;</button>
 <button class="bar" id="bar" data-cart><span id="barL">View cart</span><span id="barR"></span></button>
 <div class="veil" id="veil"></div>
 <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Cart">
@@ -317,27 +344,43 @@ function ready(){$('#ld').classList.add('done');setTimeout(()=>document.body.cla
 addEventListener('load',()=>setTimeout(ready,Math.max(0,2100-(performance.now()-t0))));
 setTimeout(ready,5000);
 
-/* Scroll: header, progress, parallax */
-const hd=$('#hd'),hb=$('#hbg'),pg=$('#prog'),still=matchMedia('(prefers-reduced-motion:reduce)').matches;
-function onScroll(){const y=scrollY,h=document.documentElement.scrollHeight-innerHeight;hd.classList.toggle('sc',y>60);pg.style.transform=`scaleX(${h?y/h:0})`;if(!still&&y<innerHeight)hb.style.transform=`translateY(${y*.25}px)`}
-addEventListener('scroll',onScroll,{passive:true});onScroll();
+/* Scroll engine: header, progress, parallax, band, steps line, marquee speed */
+const hd=$('#hd'),hb=$('#hbg'),pg=$('#prog'),hin=$('.hin'),band=$('#band'),steps=$('.steps'),sline=$('#sline'),topb=$('#topb'),still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let tk=false,vel=0,last=scrollY,mqA=null;
+function frame(){tk=false;const y=scrollY,vh=innerHeight,h=document.documentElement.scrollHeight-vh;
+ hd.classList.toggle('sc',y>60);pg.style.transform=`scaleX(${h?y/h:0})`;topb.classList.toggle('show',y>vh);
+ if(!still){
+  if(y<vh*1.2){hb.style.transform=`translate3d(0,${y*.25}px,0) scale(${1+y*.0002})`;hin.style.opacity=Math.max(0,1-y/(vh*.7));hin.style.transform=`translate3d(0,${y*.18}px,0)`}
+  $$('[data-px]').forEach(e=>{const r=e.parentElement.getBoundingClientRect();if(r.bottom<0||r.top>vh)return;e.style.transform=`translate3d(0,${((r.top+r.height/2)-vh/2)*e.dataset.px}px,0) scale(1.2)`});
+  const b=band.getBoundingClientRect();if(b.bottom>0&&b.top<vh)band.firstElementChild.style.transform=`translate3d(${(b.top-vh)*.35}px,0,0)`;
+  const s=steps.getBoundingClientRect();sline.style.setProperty('--p',Math.min(1,Math.max(0,(vh*.8-s.top)/s.height)));
+  vel+=(Math.abs(y-last)-vel)*.2;last=y;if(!mqA)mqA=$('#mq').getAnimations()[0];if(mqA)mqA.playbackRate=1+Math.min(vel,60)*.15;
+  if(vel>.05){tk=true;requestAnimationFrame(frame)}else if(mqA)mqA.playbackRate=1}}
+function onScroll(){if(!tk){tk=true;requestAnimationFrame(frame)}}
+addEventListener('scroll',onScroll,{passive:true});frame();
 
 /* Reveal + counters */
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');io.unobserve(e.target);
  e.target.querySelectorAll('[data-c]').forEach(c=>{const to=+c.dataset.c,t=performance.now();(function f(n){const p=Math.min(1,(n-t)/1400);c.textContent=Math.round(to*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t)})}),{threshold:.15});
+const big=$('.big');big.innerHTML=[...big.textContent].map((c,i)=>`<span style="--i:${i}">${c===' '?'&nbsp;':c}</span>`).join('');big.classList.add('rv2');io.observe(big);
+$('#band').firstElementChild.innerHTML='<span>Fresh</span><span>Bold</span><span>Local</span>'.repeat(6);
 $$('.rv').forEach((e,i)=>{e.style.transitionDelay=(i%4)*80+'ms';io.observe(e)});
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)$$('.links a').forEach(a=>a.classList.toggle('act',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
+['order','story','how','visit','faq'].forEach(i=>so.observe($('#'+i)));
+topb.addEventListener('click',()=>scrollTo({top:0,behavior:still?'auto':'smooth'}));
 
 /* Menu */
 let cat='coffee';
 $('#tabs').innerHTML=Object.entries(CATS).map(([k,v])=>`<button class="tab" role="tab" data-c="${k}">${v}</button>`).join('');
 function renderMenu(){
  $$('.tab').forEach(t=>{const on=t.dataset.c===cat;t.classList.toggle('on',on);t.setAttribute('aria-selected',on)});
- $('#grid').innerHTML=M.map((m,i)=>[m,i]).filter(([m])=>m[0]===cat).map(([m,i],n)=>`<article class="card" style="animation-delay:${n*60}ms" data-i="${i}">
+ $('#grid').innerHTML=M.map((m,i)=>[m,i]).filter(([m])=>m[0]===cat).map(([m,i],n)=>`<article class="card" data-i="${i}">
   <div class="ph"><img src="${IMG[m[3]]}" alt="${m[1]}" loading="lazy"></div>
   <div class="cb"><h3>${m[1]}</h3><div class="pr">${money(m[2])}</div>
   ${m[4]==='f'?`<label class="opt">Flavor <select data-f>${FLAV.map(f=>`<option>${f}</option>`).join('')}</select></label>`:''}
   ${m[4]==='p'?`<label class="opt"><input type="checkbox" data-p> Add protein +${money(PROTEIN)}</label>`:''}
   <button class="btn dark" data-add>Add to cart</button></div></article>`).join('');
+ $$('.card').forEach((c,i)=>{c.classList.add('rv');c.style.transitionDelay=(i%4)*70+'ms';io.observe(c)});
 }
 $('#tabs').addEventListener('click',e=>{const t=e.target.closest('.tab');if(t){cat=t.dataset.c;renderMenu();t.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})}});
 $('#grid').addEventListener('click',e=>{
